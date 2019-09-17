@@ -20,6 +20,7 @@ import br.com.caelum.ingresso.dao.SessaoDao;
 import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.validator.SessaoValidator;
 
 @Controller
 public class SessaoController {
@@ -32,6 +33,9 @@ public class SessaoController {
 	
 	@Autowired
 	private SessaoDao ssd;
+	
+	@Autowired
+	private SessaoValidator ssv;
  
 	@GetMapping("/admin/sessao")
 	public ModelAndView form(@RequestParam("salaId") Integer salaId, SessaoForm sform) {
@@ -53,16 +57,22 @@ public class SessaoController {
 	@Transactional
 	public ModelAndView Salvar(@Valid SessaoForm sessaoForm, BindingResult sessaoResult) {
 	
-		if(sessaoResult.hasErrors()) return form(sessaoForm.getSalaId(),sessaoForm);
+		if(sessaoResult.hasErrors()) {
+			return form(sessaoForm.getSalaId(),sessaoForm);
+		}
 		
 		Sessao sessao = sessaoForm.toSessao(sd, fd);		
 
 		System.out.println(sessao.toString());
-		
-		ssd.save(sessao);
-		
 	 
-		return new ModelAndView("redirect:/admin/sala/" + sessaoForm.getSalaId() + "/sessoes");
+		if(ssv.validaHorarios(sessao)) {
+			
+			ssd.save(sessao);
+			return new ModelAndView("redirect:/admin/sala/" + sessaoForm.getSalaId() + "/sessoes");
+		}
+		
+		return form(sessaoForm.getSalaId(),sessaoForm);
+		
 	}
  
 }
