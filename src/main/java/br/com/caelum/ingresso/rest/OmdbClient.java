@@ -17,7 +17,7 @@ public class OmdbClient {
 	        
 	        nomeDoFilme = nomeDoFilme.replace(" ", "+");
 	        
-	        String urlAPI = "https://omdb-fj22.herokuapp.com/movie?title=%s";
+	        String urlAPI = "https://omdb-fj22.herokuapp.com/movie?title=%s"; 
 	        
 	        urlAPI = String.format(urlAPI, nomeDoFilme); 
 
