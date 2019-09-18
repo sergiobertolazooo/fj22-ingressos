@@ -19,7 +19,7 @@ public class OmdbClient {
 	        
 	        String urlAPI = "https://omdb-fj22.herokuapp.com/movie?title=%s";
 	        
-	        urlAPI = String.format(urlAPI, nomeDoFilme);
+	        urlAPI = String.format(urlAPI, nomeDoFilme); 
 
 	        RestTemplate rest = new RestTemplate();
 	        
