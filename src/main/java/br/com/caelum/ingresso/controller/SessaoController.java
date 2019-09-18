@@ -34,8 +34,8 @@ public class SessaoController {
 	@Autowired
 	private SessaoDao ssd;
 	
-	@Autowired
-	private SessaoValidator ssv;
+	//@Autowired
+	//private SessaoValidator ssv;
  
 	@GetMapping("/admin/sessao")
 	public ModelAndView form(@RequestParam("salaId") Integer salaId, SessaoForm sform) {
@@ -65,11 +65,15 @@ public class SessaoController {
 
 		System.out.println(sessao.toString());
 	 
+		SessaoValidator ssv = new SessaoValidator(ssd.BuscaSessoesDaSala(sessao.getSala()));
+		
 		if(ssv.validaHorarios(sessao)) {
 			
 			ssd.save(sessao);
 			return new ModelAndView("redirect:/admin/sala/" + sessaoForm.getSalaId() + "/sessoes");
 		}
+		
+		sessaoResult.rejectValue("horario", "error.sessionConflict", "Horario indisponivel");
 		
 		return form(sessaoForm.getSalaId(),sessaoForm);
 		
