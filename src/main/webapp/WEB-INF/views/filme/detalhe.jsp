@@ -53,6 +53,7 @@
 					<thead>
 						<th>Sala</th>
 						<th>Horario</th>
+						<th>Preço</th>
 						<th>Ações</th>
 					</thead>
 					<tbody>
@@ -60,6 +61,7 @@
 							<tr>
 								<td>${sessao.sala.nome}</td>
 								<td>${sessao.horario}</td>
+								<td>${sessao.preco}</td>
 								<td>
 									<a href="/sessao/${sessao.id}/lugares" class="btn">
 										Comprar

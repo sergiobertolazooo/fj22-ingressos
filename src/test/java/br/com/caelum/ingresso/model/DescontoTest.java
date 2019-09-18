@@ -26,7 +26,7 @@ public class DescontoTest {
 		
 		Ingresso ingresso = new Ingresso(sessao, new SemDesconto());
 		
-		BigDecimal precoEsperado = new BigDecimal(10.0);
+		BigDecimal precoEsperado = new BigDecimal(32.5);
 		 
 		Assert.assertEquals(precoEsperado, ingresso.getPreco());
 	}
