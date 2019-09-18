@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,9 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 import br.com.caelum.ingresso.dao.FilmeDao;
 import br.com.caelum.ingresso.dao.SalaDao;
 import br.com.caelum.ingresso.dao.SessaoDao;
+import br.com.caelum.ingresso.model.DetalhesDoFilme;
 import br.com.caelum.ingresso.model.Filme;
+import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.rest.OmdbClient;
 import br.com.caelum.ingresso.validator.SessaoValidator;
 
 @Controller
@@ -33,9 +37,24 @@ public class SessaoController {
 	
 	@Autowired
 	private SessaoDao ssd;
-	
-	//@Autowired
-	//private SessaoValidator ssv;
+
+	@GetMapping("/sessao/{sessaoId}/lugares")
+	public ModelAndView lugares(@PathVariable("sessaoId") Integer sessaoId) {
+	 
+		ModelAndView mav = new  ModelAndView("sessao/lugares");
+		
+		Sessao sessao = ssd.findOne(sessaoId);
+		
+		mav.addObject(sessao);
+		
+		OmdbClient cliente = new OmdbClient();
+		
+		DetalhesDoFilme dds = cliente.getDetalhesFilme(sessao.getFilme());
+		
+		mav.addObject("detalhes", dds);		
+	 
+		return mav;
+	}
  
 	@GetMapping("/admin/sessao")
 	public ModelAndView form(@RequestParam("salaId") Integer salaId, SessaoForm sform) {
