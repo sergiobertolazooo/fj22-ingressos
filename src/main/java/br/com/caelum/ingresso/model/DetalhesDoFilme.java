@@ -45,6 +45,13 @@ public class DetalhesDoFilme {
 		this.descricao = descricao;
 		this.avaliacao = avaliacao;
 	}
+	
+	public DetalhesDoFilme(String descricao) {
+	 
+		this.imagem = "https://www.termoparts.com.br/wp-content/uploads/2017/10/no-image.jpg";
+ 
+		this.descricao = descricao; 
+	}
 
 	public String getImagem() {
 		return imagem;

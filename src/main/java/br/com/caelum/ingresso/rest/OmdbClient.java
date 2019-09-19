@@ -1,43 +1,35 @@
 package br.com.caelum.ingresso.rest;
   
+import java.util.Optional;
+
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import br.com.caelum.ingresso.model.DetalhesDoFilme;
+ 
 import br.com.caelum.ingresso.model.Filme;
 
 public class OmdbClient {
 	
-	public DetalhesDoFilme getDetalhesFilme(Filme filme) {
-		
-		
-		DetalhesDoFilme detalhesDoFilme = null;
-		
-		  String nomeDoFilme = filme.getNome();
+	public <T> Optional<T> getDetalhesFilme(Filme filme, Class<T> tClass) {
+	 
+		String nomeDoFilme = filme.getNome();
+        
+        nomeDoFilme = nomeDoFilme.replace(" ", "+");
+        
+        String urlAPI = "https://omdb-fj22.herokuapp.com/movie?title=%s"; 
 	        
-	        nomeDoFilme = nomeDoFilme.replace(" ", "+");
-	        
-	        String urlAPI = "https://omdb-fj22.herokuapp.com/movie?title=%s"; 
-	        
-	        urlAPI = String.format(urlAPI, nomeDoFilme); 
+        urlAPI = String.format(urlAPI, nomeDoFilme); 
 
-	        RestTemplate rest = new RestTemplate();
+        RestTemplate rest = new RestTemplate();
 	        
-	        try {
+        try {
   
-	        	detalhesDoFilme = rest.getForObject(urlAPI, DetalhesDoFilme.class);
+        	return Optional.of(rest.getForObject(urlAPI, tClass));
 	        	
-	        }catch(RestClientException e) {
-	        	
-	        	e.printStackTrace();
-	        	detalhesDoFilme = new DetalhesDoFilme();
-	        	detalhesDoFilme.setTitulo(filme.getNome());
-	        	detalhesDoFilme.setDescricao("Sem maiores informações");
-	        	
-	        }
-	        
-	    	
-		return detalhesDoFilme ;
+        }catch(RestClientException e) {
+        	
+        	return Optional.empty(); 
+        	
+        } 
 	}
 
 }

@@ -10,4 +10,9 @@ public class DescontoIdoso implements Desconto{
 		return preco.multiply(BigDecimal.valueOf(0.5));
 	}
 
+	@Override
+	public String getDescricao() { 
+		return "Idoso";
+	}
+
 }

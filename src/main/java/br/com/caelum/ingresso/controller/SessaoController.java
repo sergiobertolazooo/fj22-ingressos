@@ -1,13 +1,13 @@
 package br.com.caelum.ingresso.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 import br.com.caelum.ingresso.dao.FilmeDao;
 import br.com.caelum.ingresso.dao.SalaDao;
 import br.com.caelum.ingresso.dao.SessaoDao;
-import br.com.caelum.ingresso.model.DetalhesDoFilme;
+import br.com.caelum.ingresso.enums.TipoDeIngresso;
+import br.com.caelum.ingresso.model.Carrinho;
 import br.com.caelum.ingresso.model.Filme;
-import br.com.caelum.ingresso.model.Sala;
+import br.com.caelum.ingresso.model.ImagemCapa;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
 import br.com.caelum.ingresso.rest.OmdbClient;
@@ -37,6 +38,9 @@ public class SessaoController {
 	
 	@Autowired
 	private SessaoDao ssd;
+	
+	@Autowired
+	private Carrinho carrinho;
 
 	@GetMapping("/sessao/{sessaoId}/lugares")
 	public ModelAndView lugares(@PathVariable("sessaoId") Integer sessaoId) {
@@ -49,9 +53,14 @@ public class SessaoController {
 		
 		OmdbClient cliente = new OmdbClient();
 		
-		DetalhesDoFilme dds = cliente.getDetalhesFilme(sessao.getFilme());
+		Optional<ImagemCapa> dds = cliente.getDetalhesFilme(sessao.getFilme(), ImagemCapa.class);
 		
-		mav.addObject("detalhes", dds);		
+		mav.addObject("imagemCapa", dds.orElse(new ImagemCapa()));		
+		
+		TipoDeIngresso[] tiposDeIngresso = TipoDeIngresso.values();
+		
+		mav.addObject("tiposDeIngressos", tiposDeIngresso);
+		mav.addObject("carrinho", carrinho);
 	 
 		return mav;
 	}

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.*;
 
-import br.com.caelum.ingresso.descontos.Desconto;
+import br.com.caelum.ingresso.enums.TipoDeIngresso;
 
 @Entity
 public class Ingresso {
@@ -17,29 +17,23 @@ public class Ingresso {
     @ManyToOne
     private Sessao sessao;
     
-    private BigDecimal preco;
+    private BigDecimal preco; 
+    
+    @ManyToOne
+    private Lugar lugar;
+    
+    @Enumerated(EnumType.STRING)
+    private TipoDeIngresso tipoDeIngresso;
  
     public Ingresso() {
     	
     }    
     
-    public Ingresso(Sessao sessao, Desconto desconto) {
-    	this.sessao = sessao;
-    	
-    	//BigDecimal precoComDesconto = BigDecimal.ZERO;
-    	
-		/*
-		 * switch(tipoDoIngresso) { case "Estudante": precoComDesconto =
-		 * sessao.getPreco().multiply(BigDecimal.valueOf(0.5)); case "Correntista":
-		 * precoComDesconto = sessao.getPreco().multiply(BigDecimal.valueOf(0.7)); case
-		 * "Idoso": precoComDesconto =
-		 * sessao.getPreco().multiply(BigDecimal.valueOf(0.6)); default:
-		 * precoComDesconto = sessao.getPreco(); }
-		 */
-    	
-    	//this.preco = precoComDesconto;
-    	
-    	this.preco = desconto.aplicaDesconto(sessao.getPreco());
+    public Ingresso(Sessao sessao, TipoDeIngresso tipoDeIngresso, Lugar lugar) {
+    	this.sessao = sessao;  
+    	this.preco = tipoDeIngresso.aplicaDesconto(sessao.getPreco());
+    	this.lugar = lugar;
+    	this.setTipoDeIngresso(tipoDeIngresso);
     }
     
 	public Integer getId() {
@@ -64,6 +58,22 @@ public class Ingresso {
 
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
+	}
+
+	public Lugar getLugar() {
+		return lugar;
+	}
+
+	public void setLugar(Lugar lugar) {
+		this.lugar = lugar;
+	}
+
+	public TipoDeIngresso getTipoDeIngresso() {
+		return tipoDeIngresso;
+	}
+
+	public void setTipoDeIngresso(TipoDeIngresso tipoDeIngresso) {
+		this.tipoDeIngresso = tipoDeIngresso;
 	}
 
 }

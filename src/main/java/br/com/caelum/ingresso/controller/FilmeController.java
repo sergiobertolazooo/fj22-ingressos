@@ -102,13 +102,13 @@ public class FilmeController {
         modelAndView.addObject("sessoes", sessaoDao.BuscaSessoesPorFilme(filme));
         
       
-        DetalhesDoFilme detalhesDoFilme = null;
+        Optional<DetalhesDoFilme> detalhesDoFilme = null;
         
         OmdbClient omdbClient = new OmdbClient();
  
-        detalhesDoFilme = omdbClient.getDetalhesFilme(filme);
+        detalhesDoFilme = omdbClient.getDetalhesFilme(filme, DetalhesDoFilme.class);
         
-        modelAndView.addObject("detalhes", detalhesDoFilme);
+        modelAndView.addObject("detalhes", detalhesDoFilme.orElse(new DetalhesDoFilme("Sem mais informações")));
         
         return modelAndView;
     }
