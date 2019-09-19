@@ -64,8 +64,10 @@ public class CompraController {
 		
 		if(cartao.isValido()) {
 			cd.save(carrinho.toCompra());
+			this.carrinho.limpa();
 		}else {
 			result.reject("Cartão invalido", "Cartão invalido");
+			return checkout(cartao);
 		}
 
 		

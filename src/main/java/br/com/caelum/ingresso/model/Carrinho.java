@@ -19,7 +19,7 @@ public class Carrinho {
 	}
 
 	public void limpa() {
-		ingressos.clear();
+		this.ingressos.clear();
 	}
 	
 	public List<Ingresso> getIngressos() {
